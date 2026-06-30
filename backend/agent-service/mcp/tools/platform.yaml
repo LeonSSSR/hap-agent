@@ -1,0 +1,197 @@
+domain: platform
+tools:
+- tool_name: platform_audit_query
+  title: 平台审计查询
+  description: Read-only audit timeline lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - workflow.read
+  input_schema:
+    type: object
+    properties:
+      trace_id:
+        type: string
+      run_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: dataset_catalog_query
+  title: 数据集目录查询
+  description: Read-only dataset catalog lookup with keyword search.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - dataset.read
+  - catalog.read
+  input_schema:
+    type: object
+    properties:
+      keyword:
+        type: string
+      dataset_id:
+        type: string
+      user_input:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      datasets:
+        type: array
+      dataset_id:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: platform_lineage_query
+  title: 数据血缘查询
+  description: Read-only lineage catalog lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - lineage.read
+  - catalog.read
+  input_schema:
+    type: object
+    properties:
+      entity:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      lineage:
+        type: object
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: platform_service_inventory
+  title: 平台服务健康查询
+  description: Read-only lookup of platform service inventory and TCP reachability.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - platform.read
+  input_schema:
+    type: object
+    properties:
+      scenario:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      services:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: platform_task_status
+  title: 任务状态查询
+  description: Read-only task status catalog lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - workflow.read
+  - task.read
+  input_schema:
+    type: object
+    properties:
+      skill_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      stats:
+        type: object
+      items:
+        type: array
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: lineage_project_create
+  title: 创建血缘项目
+  description: Create lineage governance project with name and data type.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - lineage.read
+  - project.write
+  - project.read
+  input_schema:
+    type: object
+    required:
+    - name
+    - dataType
+    properties:
+      name:
+        type: string
+        description: 项目名称
+      dataType:
+        type: string
+        enum:
+        - TABULAR
+        - TIMESERIES
+        - TEXT
+        - IMAGE
+        - VIDEO
+        - AUDIO
+        description: 数据类型
+  output_schema:
+    type: object
+    properties:
+      project_id:
+        type: string
+      name:
+        type: string
+      dataType:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_2_append_only_write
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: true

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.mypy_cache/
+
+# Secrets & runtime data
+.env
+backend/agent-service/.env
+backend/agent-service/data/sessions/
+backend/agent-service/data/run_state/
+backend/agent-service/data/audit/
+*.sqlite3
+
+# Node
+node_modules/
+dist/
+.umi/
+src/.umi/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs
+*.log

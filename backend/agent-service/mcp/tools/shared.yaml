@@ -1,0 +1,29 @@
+domain: shared
+tools:
+- tool_name: service_monitor_query
+  title: 服务监控查询
+  description: Read-only service monitoring metrics.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - model.monitor.read
+  - inference.read
+  input_schema:
+    type: object
+    properties:
+      service_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      metrics:
+        type: object
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true

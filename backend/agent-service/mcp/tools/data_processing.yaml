@@ -1,0 +1,478 @@
+domain: data_processing
+tools:
+- tool_name: augmentation_job_list
+  title: 增强任务列表
+  description: Read-only augmentation job list.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - processing.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: augmentation_job_run
+  title: 执行数据增强
+  description: Run augmentation job.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - processing.write
+  - processing.read
+  input_schema:
+    type: object
+    properties:
+      dataset_id:
+        type: string
+      strategy:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      run_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: data_cleaning_job_create
+  title: 新建清洗规则
+  description: Append-only cleaning rule creation.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - processing.write
+  - processing.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      rules:
+        type: array
+  output_schema:
+    type: object
+    properties:
+      job_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: data_cleaning_job_list
+  title: 清洗任务列表
+  description: Read-only cleaning job list.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - processing.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: data_cleaning_job_run
+  title: 执行数据清洗
+  description: Run data cleaning job.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - processing.write
+  - processing.read
+  input_schema:
+    type: object
+    properties:
+      job_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      run_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: data_exploration_query
+  title: 数据探索分析
+  description: Read-only exploration analysis.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - processing.read
+  - dataset.read
+  input_schema:
+    type: object
+    properties:
+      dataset_id:
+        type: string
+      analysis_type:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      report_id:
+        type: string
+      summary:
+        type: object
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: data_split_catalog_query
+  title: 数据切分状态
+  description: Read-only split status.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - dataset.read
+  input_schema:
+    type: object
+    properties:
+      dataset_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      splits:
+        type: object
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: data_split_execute
+  title: 执行数据切分
+  description: Execute train/val/test split.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - dataset.write
+  - dataset.read
+  input_schema:
+    type: object
+    properties:
+      dataset_id:
+        type: string
+      ratios:
+        type: object
+  output_schema:
+    type: object
+    properties:
+      split_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: feature_engineering_catalog_query
+  title: 特征工程目录
+  description: Read-only feature engineering catalog.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - feature.read
+  - dataset.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: feature_engineering_execute
+  title: 执行特征工程
+  description: Execute feature engineering.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - feature.write
+  - feature.read
+  input_schema:
+    type: object
+    properties:
+      dataset_id:
+        type: string
+      pipeline:
+        type: object
+  output_schema:
+    type: object
+    properties:
+      run_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: feature_registry_catalog_query
+  title: 特征注册目录
+  description: Read-only feature registry catalog.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - feature.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      features:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: feature_registry_register
+  title: 注册特征
+  description: Register features.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - feature.write
+  - feature.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      features:
+        type: array
+  output_schema:
+    type: object
+    properties:
+      registry_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: labeling_project_create
+  title: 创建标注项目
+  description: Append-only labeling project creation.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - labeling.write
+  - labeling.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      dataset_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      project_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: labeling_project_list
+  title: 标注项目列表
+  description: Read-only labeling project list.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - labeling.read
+  input_schema:
+    type: object
+    properties:
+      keyword:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: transform_job_create
+  title: 配置数据转换
+  description: Append-only transform job configuration.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - processing.write
+  - processing.read
+  input_schema:
+    type: object
+    properties:
+      dataset_id:
+        type: string
+      operations:
+        type: array
+  output_schema:
+    type: object
+    properties:
+      job_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: transform_job_run
+  title: 执行数据转换
+  description: Run transform job.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - processing.write
+  - processing.read
+  input_schema:
+    type: object
+    properties:
+      job_id:
+        type: string
+      dataset_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      run_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: transform_pipeline_list
+  title: 转换任务列表
+  description: Read-only transform pipeline list.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - processing.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true

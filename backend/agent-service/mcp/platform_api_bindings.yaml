@@ -1,0 +1,313 @@
+# Platform HTTP bindings for agent-service MCP live/hybrid execution.
+registry_id: znl-platform-api-bindings
+version: 1.0.0
+default_base_url: http://127.0.0.1:8085
+api_prefix: /api
+policies:
+  default_timeout_seconds: 30
+tools:
+  - tool_name: platform_api.datasets.list
+    method: GET
+    path: /datasets
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 10}
+      keyword: {optional: true}
+
+  - tool_name: dataset_version_create
+    method: POST
+    path: /datasets/{dataset_id}/split
+    readonly: false
+    path_params:
+      dataset_id: {required: true}
+
+  - tool_name: training_job_create
+    method: POST
+    path: /train/jobs
+    readonly: false
+
+  - tool_name: training_job_status
+    method: GET
+    path: /train/jobs/{job_id}
+    readonly: true
+    path_params:
+      job_id: {required: true}
+
+  - tool_name: platform_task_status
+    method: GET
+    path: /train/jobs
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+      status: {optional: true}
+
+  - tool_name: platform_lineage_query
+    method: GET
+    path: /unified-lineage/search
+    readonly: true
+    query_params:
+      q: {optional: true}
+
+  - tool_name: platform_api.lineage.graph.get
+    method: GET
+    path: /unified-lineage
+    readonly: true
+    query_params:
+      project_id: {optional: true}
+
+  - tool_name: platform_api.lineage.node.get
+    method: GET
+    path: /unified-lineage/node/{node_id}
+    readonly: true
+    path_params:
+      node_id: {required: true}
+
+  - tool_name: platform_api.lineage.impact
+    method: GET
+    path: /unified-lineage/impact/{node_id}
+    readonly: true
+    path_params:
+      node_id: {required: true}
+
+  - tool_name: model_versions_list
+    method: GET
+    path: /model-versions
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+      modelName: {optional: true}
+      status: {optional: true}
+
+  - tool_name: inference_services_list
+    method: GET
+    path: /inference/services
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+      modelName: {optional: true}
+      status: {optional: true}
+
+  - tool_name: inference_service_status
+    method: GET
+    path: /inference/services/{name}/health-check
+    readonly: true
+    path_params:
+      name: {required: true}
+
+  - tool_name: model_evaluation_query
+    method: GET
+    path: /model-versions/{version_id}/report
+    readonly: true
+    path_params:
+      version_id: {required: true}
+
+  - tool_name: model_version_register
+    method: POST
+    path: /model-versions
+    readonly: false
+
+  - tool_name: model_publish_request
+    method: POST
+    path: /model-versions/{version_id}/promote
+    readonly: false
+    path_params:
+      version_id: {required: true}
+
+  - tool_name: platform_api.model_versions.evaluate
+    method: POST
+    path: /model-versions/evaluate
+    readonly: false
+
+  - tool_name: inference_service_deploy
+    method: POST
+    path: /inference/services
+    readonly: false
+
+  - tool_name: online_inference_invoke
+    method: POST
+    path: /inference/services/{name}/predict
+    readonly: false
+    path_params:
+      name: {required: true}
+
+  - tool_name: model_governance_audit_query
+    method: GET
+    path: /governance/data-map
+    readonly: true
+
+  - tool_name: model_monitor_query
+    method: GET
+    path: /monitor
+    readonly: true
+    query_params:
+      modelId: {optional: true}
+      serviceId: {optional: true}
+      status: {optional: true}
+
+  - tool_name: lineage_project_create
+    method: POST
+    path: /projects
+    readonly: false
+
+  - tool_name: platform_audit_query
+    method: GET
+    path: /system/audit-logs
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+
+  # 原 mock_only 语义工具 → 真实 API binding
+  - tool_name: augmentation_job_list
+    method: GET
+    path: /data-quality/checks
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+
+  - tool_name: augmentation_job_run
+    method: POST
+    path: /governance/augment/execute
+    readonly: false
+
+  - tool_name: cicd_pipeline_catalog_query
+    method: GET
+    path: /cicd/pipelines
+    readonly: true
+
+  - tool_name: cicd_deploy_request
+    method: POST
+    path: /cicd/pipelines/{pipeline_id}/trigger
+    readonly: false
+    path_params:
+      pipeline_id: {required: true}
+
+  - tool_name: collaboration_space_query
+    method: GET
+    path: /collaboration/workspaces
+    readonly: true
+
+  - tool_name: data_cleaning_job_list
+    method: GET
+    path: /data-quality/rules
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+
+  - tool_name: data_cleaning_job_create
+    method: POST
+    path: /data-quality/rules
+    readonly: false
+
+  - tool_name: data_cleaning_job_run
+    method: POST
+    path: /data-quality/checks/execute
+    readonly: false
+
+  - tool_name: data_split_catalog_query
+    method: GET
+    path: /governance/split/methods/{dataset_id}
+    readonly: true
+    path_params:
+      dataset_id: {required: true}
+
+  - tool_name: feature_engineering_catalog_query
+    method: GET
+    path: /features
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+
+  - tool_name: feature_registry_catalog_query
+    method: GET
+    path: /features
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+
+  - tool_name: feature_registry_register
+    method: POST
+    path: /features
+    readonly: false
+
+  - tool_name: feature_engineering_execute
+    method: POST
+    path: /data-transform/execute
+    readonly: false
+
+  - tool_name: infer_logs_query
+    method: GET
+    path: /inference/services/{name}/logs
+    readonly: true
+    path_params:
+      name: {required: true}
+
+  - tool_name: ml_pipeline_catalog_query
+    method: GET
+    path: /pipelines
+    readonly: true
+
+  - tool_name: ml_pipeline_component_catalog_query
+    method: GET
+    path: /pipeline-components
+    readonly: true
+
+  - tool_name: ml_pipeline_create
+    method: POST
+    path: /pipelines
+    readonly: false
+
+  - tool_name: ml_pipeline_recurring_job_create
+    method: POST
+    path: /recurring-runs
+    readonly: false
+
+  - tool_name: ml_pipeline_run_list
+    method: GET
+    path: /pipeline-runs
+    readonly: true
+
+  - tool_name: ml_pipeline_run_submit
+    method: POST
+    path: /pipeline-runs
+    readonly: false
+
+  - tool_name: ml_pipeline_template_catalog_query
+    method: GET
+    path: /pipeline-templates
+    readonly: true
+
+  - tool_name: transform_pipeline_list
+    method: GET
+    path: /data-quality/checks
+    readonly: true
+    query_params:
+      pageNum: {optional: true, default: 1}
+      pageSize: {optional: true, default: 20}
+
+  - tool_name: transform_job_create
+    method: POST
+    path: /data-transform/preview
+    readonly: false
+
+  - tool_name: transform_job_run
+    method: POST
+    path: /data-transform/execute
+    readonly: false
+
+  - tool_name: service_monitor_query
+    method: GET
+    path: /monitor
+    readonly: true
+    query_params:
+      modelId: {optional: true}
+      serviceId: {optional: true}
+      status: {optional: true}

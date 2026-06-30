@@ -1,0 +1,435 @@
+domain: model_development
+tools:
+- tool_name: algorithm_catalog_query
+  title: 算法目录
+  description: Read-only algorithm catalog.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - algorithm.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      algorithms:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: algorithm_register
+  title: 注册算法
+  description: Register custom algorithm.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - algorithm.write
+  - algorithm.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      image:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      algorithm_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: collaboration_space_query
+  title: 协作空间列表
+  description: Read-only collaboration spaces.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - collaboration.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      spaces:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: hyperparam_experiment_create
+  title: 创建调优实验
+  description: Create hyperparameter experiment.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - experiment.write
+  - experiment.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      algorithm:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      experiment_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: hyperparam_experiment_list
+  title: 调优实验列表
+  description: Read-only hyperparameter experiments.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - experiment.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_catalog_query
+  title: Pipeline 目录
+  description: Read-only ML pipeline catalog.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - pipeline.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_component_catalog_query
+  title: Pipeline 组件目录
+  description: Read-only pipeline components.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - pipeline.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      components:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_create
+  title: 新建 Pipeline
+  description: Create ML pipeline.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - pipeline.write
+  - pipeline.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      pipeline_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_recurring_job_create
+  title: 创建定时 Pipeline
+  description: Create recurring pipeline job.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - pipeline.write
+  - pipeline.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      cron:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      job_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_run_list
+  title: Pipeline 运行列表
+  description: Read-only pipeline run list.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - pipeline.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_run_submit
+  title: 提交 Pipeline 运行
+  description: Submit ML pipeline run.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - pipeline.write
+  - pipeline.read
+  input_schema:
+    type: object
+    properties:
+      pipeline_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      run_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: ml_pipeline_template_catalog_query
+  title: Pipeline 模板目录
+  description: Read-only pipeline templates.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - pipeline.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      templates:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: notebook_catalog_query
+  title: Notebook 目录
+  description: Read-only notebook catalog.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - notebook.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: notebook_session_create
+  title: 新建 Notebook
+  description: Create notebook session.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - notebook.write
+  - notebook.read
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+      image:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      notebook_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: training_job_create
+  title: 训练任务创建
+  description: Append-only training job creation.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - training.write
+  - training.read
+  input_schema:
+    type: object
+    properties:
+      dataset_version_id:
+        type: string
+      training_config:
+        type: object
+  output_schema:
+    type: object
+    properties:
+      training_job_id:
+        type: string
+      run_id:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_2_append_only_write
+  realization_policy:
+    real_enabled_after_readonly: true
+    requires_confirmation: true
+    requires_idempotency_key: true
+    requires_append_only_validation: true
+    requires_audit: true
+    requires_failure_compensation: true
+- tool_name: training_job_status
+  title: 训练任务状态查询
+  description: Read-only training job status lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - training.read
+  input_schema:
+    type: object
+    properties:
+      training_job_id:
+        type: string
+      run_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      status:
+        type: string
+      metrics:
+        type: object
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false

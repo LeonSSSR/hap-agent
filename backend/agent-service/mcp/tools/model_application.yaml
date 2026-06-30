@@ -1,0 +1,443 @@
+domain: model_application
+tools:
+- tool_name: cicd_deploy_request
+  title: 触发 CI/CD 部署
+  description: Trigger CI/CD deployment.
+  source: platform
+  risk_level: high
+  permission_scope:
+  - inference.deploy.write
+  - model.publish.request
+  input_schema:
+    type: object
+    properties:
+      pipeline_id:
+        type: string
+      model_version_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      deploy_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: cicd_pipeline_catalog_query
+  title: CI/CD 流水线目录
+  description: Read-only CI/CD pipeline catalog.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - inference.read
+  - workflow.read
+  input_schema:
+    type: object
+  output_schema:
+    type: object
+    properties:
+      pipelines:
+        type: array
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: infer_logs_query
+  title: 推理日志查询
+  description: Read-only inference logs.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - inference.read
+  input_schema:
+    type: object
+    properties:
+      service_id:
+        type: string
+      keyword:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      logs:
+        type: array
+      total:
+        type: integer
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: inference_service_deploy
+  title: 推理服务部署
+  description: High-risk inference service deployment revision creation.
+  source: platform
+  risk_level: high
+  permission_scope:
+  - inference.deploy.write
+  - inference.deploy.read
+  input_schema:
+    type: object
+    properties:
+      model_version_id:
+        type: string
+      deployment_target:
+        type: object
+  output_schema:
+    type: object
+    properties:
+      service_id:
+        type: string
+      endpoint:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_3_high_risk_request
+  realization_policy:
+    request_or_revision_only: true
+    direct_publish_or_deploy_forbidden: true
+    requires_confirmation: true
+    requires_approval: true
+    requires_idempotency_key: true
+    requires_audit: true
+    requires_failure_compensation: true
+- tool_name: inference_service_status
+  title: 推理服务状态查询
+  description: Read-only inference service status lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - inference.deploy.read
+  input_schema:
+    type: object
+    properties:
+      service_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      status:
+        type: string
+      endpoint:
+        type: string
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: inference_services_list
+  title: 推理服务列表查询
+  description: Read-only inference service catalog lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - inference.read
+  input_schema:
+    type: object
+    properties:
+      model_name:
+        type: string
+      status:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+      total:
+        type: integer
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: model_evaluation_query
+  title: 模型评估查询
+  description: Read-only model evaluation lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - model.evaluation.read
+  input_schema:
+    type: object
+    properties:
+      model_version_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      metrics:
+        type: object
+      passed:
+        type: boolean
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: model_evaluation_run
+  title: 发起模型评估
+  description: Run model evaluation job.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - model.registry.read
+  - model.registry.write
+  input_schema:
+    type: object
+    properties:
+      model_version_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      evaluation_id:
+        type: string
+      status:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch
+  realization_policy:
+    real_enabled_first: true
+- tool_name: model_governance_audit_query
+  title: 模型治理审计查询
+  description: Read-only governance audit query.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - governance.read
+  - workflow.read
+  input_schema:
+    type: object
+    properties:
+      model_id:
+        type: string
+      time_range:
+        type: object
+  output_schema:
+    type: object
+    properties:
+      governance_findings:
+        type: array
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: model_monitor_query
+  title: 模型监控查询
+  description: Read-only model monitoring query.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - model.monitor.read
+  input_schema:
+    type: object
+    properties:
+      model_id:
+        type: string
+      service_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      monitor_summary:
+        type: object
+      drift_report:
+        type: object
+  resource_type: db
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: model_publish_request
+  title: 模型发布请求
+  description: High-risk model publish request creation.
+  source: platform
+  risk_level: high
+  permission_scope:
+  - model.publish.request
+  - model.publish.approve
+  input_schema:
+    type: object
+    properties:
+      model_version_id:
+        type: string
+      target_stage:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      publish_request_id:
+        type: string
+      approval_state:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_3_high_risk_request
+  realization_policy:
+    request_or_revision_only: true
+    direct_publish_or_deploy_forbidden: true
+    requires_confirmation: true
+    requires_approval: true
+    requires_idempotency_key: true
+    requires_audit: true
+    requires_failure_compensation: true
+- tool_name: model_version_register
+  title: 模型版本注册
+  description: Append-only model version registration.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - model.registry.write
+  - model.registry.read
+  input_schema:
+    type: object
+    properties:
+      model_name:
+        type: string
+      training_job_id:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      model_version_id:
+        type: string
+      registry_uri:
+        type: string
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_2_append_only_write
+  realization_policy:
+    real_enabled_after_readonly: true
+    requires_confirmation: true
+    requires_idempotency_key: true
+    requires_append_only_validation: true
+    requires_audit: true
+    requires_failure_compensation: true
+- tool_name: model_versions_list
+  title: 模型版本列表查询
+  description: Read-only model version catalog lookup.
+  source: platform
+  risk_level: low
+  permission_scope:
+  - model.read
+  input_schema:
+    type: object
+    properties:
+      model_name:
+        type: string
+      status:
+        type: string
+  output_schema:
+    type: object
+    properties:
+      items:
+        type: array
+      total:
+        type: integer
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: read_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_1_readonly
+  realization_policy:
+    real_enabled_first: true
+    write_allowed: false
+- tool_name: online_inference_invoke
+  title: 在线推理调用
+  description: Append-only online inference invocation.
+  source: platform
+  risk_level: medium
+  permission_scope:
+  - inference.invoke
+  - inference.read
+  input_schema:
+    type: object
+    properties:
+      service_id:
+        type: string
+      request_payload:
+        type: object
+  output_schema:
+    type: object
+    properties:
+      inference_request_id:
+        type: string
+      prediction:
+        type: object
+  resource_type: api
+  replaceable_mock: true
+  append_only_policy: append_only
+  provider:
+    mock: true
+    real: true
+  realization_stage: p2_batch_2_append_only_write
+  realization_policy:
+    real_enabled_after_readonly: true
+    requires_confirmation: true
+    requires_idempotency_key: true
+    requires_append_only_validation: true
+    requires_audit: true
+    requires_failure_compensation: true

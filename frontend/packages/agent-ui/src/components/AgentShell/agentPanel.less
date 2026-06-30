@@ -1,0 +1,57 @@
+/* 右侧悬浮 Agent 面板：对话气泡白卡片风格 */
+.hap-agent-split-root {
+  .hap-agent-turn-bubble {
+    background: #ffffff !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .hap-agent-turn-bubble--user {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hap-agent-turn-user-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .hap-agent-turn-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: #dc2626;
+    cursor: pointer;
+  }
+
+  .hap-agent-turn-user-text {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .hap-agent-turn-recall {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: auto;
+    flex-shrink: 0;
+    border-radius: 6px;
+    color: #98999b;
+    font-size: 15px;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+
+    &:hover {
+      color: #4d4d4f;
+      background: rgba(15, 23, 42, 0.06);
+    }
+  }
+}

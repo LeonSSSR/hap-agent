@@ -1,0 +1,457 @@
+resources:
+- resource_key: platform.ml.pipeline.node.list
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: platform_ml_lifecycle_analysis
+  schema_ref: mock.schema.platform.ml.pipeline.node.list
+  fallback_to_real: false
+  description: 平台 ML 生命周期链路分析所需的结构化节点 mock 数据，可替换为真实 workflow/服务拓扑。
+  payload:
+    nodes:
+    - id: input_node
+      name: 对话输入
+      status: ready
+      ui_action_id: chat_input
+    - id: skill_select_node
+      name: Skill 选择
+      status: ready
+      ui_action_id: skill_picker
+    - id: intent_parse_node
+      name: Agent 理解结果
+      status: ready
+      ui_action_id: understanding_panel
+    - id: risk_evaluate_node
+      name: 风险评估
+      status: ready
+      ui_action_id: risk_badge
+    - id: permission_check_node
+      name: 权限校验
+      status: ready
+      ui_action_id: permission_panel
+    - id: data_prepare_node
+      name: 准备数据
+      status: ready
+      ui_action_id: ml.data.prepare
+    - id: training_submit_node
+      name: 发起训练
+      status: ready
+      ui_action_id: ml.training.submit
+    - id: model_register_node
+      name: 注册模型版本
+      status: ready
+      ui_action_id: ml.model.register
+    - id: evaluation_node
+      name: 评估与发布
+      status: ready
+      ui_action_id: ml.evaluation
+    - id: deploy_node
+      name: 部署推理服务
+      status: ready
+      ui_action_id: ml.deploy
+    - id: inference_test_node
+      name: 在线推理
+      status: ready
+      ui_action_id: ml.inference.test
+    - id: governance_node
+      name: 后续治理
+      status: ready
+      ui_action_id: ml.governance
+    updated_at: '2026-05-28T00:00:00Z'
+  trace_id: mock-trace-platform-ml-pipeline-node-list-platform_ml_lifecycle_analysis
+  audit_id: mock-audit-platform-ml-pipeline-node-list-platform_ml_lifecycle_analysis
+- resource_key: platform.service.inventory
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: query_platform_services
+  schema_ref: mock.schema.platform.service.inventory
+  fallback_to_real: false
+  description: 平台服务目录与健康状态 mock 数据，可替换为真实服务注册中心/监控数据。
+  payload:
+    services:
+    - name: agent-service
+      status: healthy
+      source: mock
+      port: 8010
+    - name: core-service
+      status: healthy
+      source: mock
+      port: 8085
+    - name: training-proxy
+      status: healthy
+      source: mock
+      port: 8091
+    - name: kserve-proxy
+      status: degraded
+      source: mock
+      port: 8094
+  trace_id: mock-trace-platform-service-inventory-query_platform_services
+  audit_id: mock-audit-platform-service-inventory-query_platform_services
+- resource_key: platform.audit.timeline
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: audit_replay
+  schema_ref: mock.schema.platform.audit.timeline
+  fallback_to_real: false
+  description: Agent 审计轨迹 mock 数据，可替换为真实审计库查询结果。
+  payload:
+    events: []
+    source: mock
+  trace_id: mock-trace-platform-audit-timeline-audit_replay
+  audit_id: mock-audit-platform-audit-timeline-audit_replay
+- resource_key: platform.dataset.catalog
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.dataset.catalog
+  fallback_to_real: false
+  description: 准备数据阶段的数据集目录 mock 数据，可替换为 core-service 数据集列表。
+  payload:
+    datasets:
+    - dataset_id: ds-credit-risk-001
+      name: credit_risk_training_dataset
+      latest_version: dv-credit-risk-20260528-001
+      status: ready
+      owner: risk-model-team
+      source: mock
+  trace_id: mock-trace-platform-dataset-catalog-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-dataset-catalog-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.dataset.version.create
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.dataset.version.create
+  fallback_to_real: false
+  description: 准备数据阶段的 append-only 数据集版本创建结果 mock 数据，真实接入时对应受控创建数据版本。
+  payload:
+    dataset_id: ds-credit-risk-001
+    dataset_version_id: dv-credit-risk-20260528-002
+    mutation_policy: append_only
+    status: created
+    lineage:
+      upstream:
+      - raw_credit_order_table
+      - raw_customer_profile_table
+      downstream:
+      - training_job_pending
+    source: mock
+  trace_id: mock-trace-platform-dataset-version-create-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-dataset-version-create-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.training.job.create
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.training.job.create
+  fallback_to_real: false
+  description: 发起训练阶段的训练任务创建结果 mock 数据，真实接入时对应训练服务/Kubeflow/Katib 受控创建任务。
+  payload:
+    training_job_id: train-credit-risk-20260528-001
+    run_id: run-credit-risk-20260528-001
+    dataset_version_id: dv-credit-risk-20260528-002
+    algorithm: xgboost
+    status: submitted
+    mutation_policy: append_only
+    source: mock
+  trace_id: mock-trace-platform-training-job-create-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-training-job-create-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.training.job.status
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.training.job.status
+  fallback_to_real: false
+  description: 训练监控阶段的训练任务状态 mock 数据，可替换为真实训练任务状态/指标。
+  payload:
+    training_job_id: train-credit-risk-20260528-001
+    run_id: run-credit-risk-20260528-001
+    status: succeeded
+    metrics:
+      auc: 0.932
+      precision: 0.891
+      recall: 0.864
+    source: mock
+  trace_id: mock-trace-platform-training-job-status-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-training-job-status-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.model.version.register
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.model.version.register
+  fallback_to_real: false
+  description: 注册模型版本阶段的 append-only 模型版本注册结果 mock 数据，可替换为真实模型注册中心。
+  payload:
+    model_name: credit-risk-score
+    model_version_id: mv-credit-risk-20260528-001
+    registry_uri: models:/credit-risk-score/20260528-001
+    training_job_id: train-credit-risk-20260528-001
+    status: registered
+    mutation_policy: append_only
+    source: mock
+  trace_id: mock-trace-platform-model-version-register-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-model-version-register-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.model.evaluation.query
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.model.evaluation.query
+  fallback_to_real: false
+  description: 评估阶段的模型评估结果 mock 数据，可替换为真实评估报告。
+  payload:
+    model_version_id: mv-credit-risk-20260528-001
+    passed: true
+    threshold_policy:
+      auc_min: 0.9
+      precision_min: 0.85
+    metrics:
+      auc: 0.932
+      precision: 0.891
+      recall: 0.864
+    source: mock
+  trace_id: mock-trace-platform-model-evaluation-query-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-model-evaluation-query-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.model.publish.request
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.model.publish.request
+  fallback_to_real: false
+  description: 发布申请阶段的高风险确认 mock 数据，真实接入时必须人工确认和权限校验。
+  payload:
+    publish_request_id: pub-credit-risk-20260528-001
+    model_version_id: mv-credit-risk-20260528-001
+    target_stage: production
+    approval_state: pending_human_approval
+    risk_level: high
+    requires_confirmation: true
+    mutation_policy: append_only
+    source: mock
+  trace_id: mock-trace-platform-model-publish-request-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-model-publish-request-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.inference.service.deploy
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.inference.service.deploy
+  fallback_to_real: false
+  description: 部署推理服务阶段的高风险部署修订创建 mock 数据，真实接入时对应 KServe/部署服务受控创建 revision。
+  payload:
+    service_id: svc-credit-risk-score-prod
+    service_name: credit-risk-score-prod
+    deployment_revision_id: deploy-credit-risk-20260528-001
+    endpoint: https://mock.inference.local/credit-risk-score-prod
+    status: running
+    risk_level: high
+    requires_confirmation: true
+    mutation_policy: append_only
+    source: mock
+  trace_id: mock-trace-platform-inference-service-deploy-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-inference-service-deploy-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.inference.service.status
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.inference.service.status
+  fallback_to_real: false
+  description: 推理服务状态查询 mock 数据，可替换为真实 KServe/服务状态。
+  payload:
+    service_id: svc-credit-risk-score-prod
+    service_name: credit-risk-score-prod
+    status: running
+    endpoint: https://mock.inference.local/credit-risk-score-prod
+    replicas:
+      desired: 2
+      ready: 2
+    source: mock
+  trace_id: mock-trace-platform-inference-service-status-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-inference-service-status-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.inference.invoke
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.inference.invoke
+  fallback_to_real: false
+  description: 在线推理阶段的 append-only 调用记录 mock 数据，真实接入时对应受控推理请求和调用记录。
+  payload:
+    inference_request_id: infer-credit-risk-20260528-001
+    service_id: svc-credit-risk-score-prod
+    prediction:
+      risk_score: 0.217
+      risk_level: low
+    status: succeeded
+    mutation_policy: append_only
+    source: mock
+  trace_id: mock-trace-platform-inference-invoke-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-inference-invoke-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.model.monitor.query
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.model.monitor.query
+  fallback_to_real: false
+  description: 模型监控阶段的只读 mock 数据，可替换为真实监控/漂移检测数据。
+  payload:
+    model_id: credit-risk-score
+    service_id: svc-credit-risk-score-prod
+    monitor_summary:
+      qps: 32
+      p95_latency_ms: 86
+      error_rate: 0.001
+    drift_report:
+      status: stable
+      psi: 0.06
+    source: mock
+  trace_id: mock-trace-platform-model-monitor-query-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-model-monitor-query-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.model.governance.audit.query
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.model.governance.audit.query
+  fallback_to_real: false
+  description: 后续治理阶段的治理审计 mock 数据，可替换为真实治理/审计系统。
+  payload:
+    governance_findings:
+    - id: gov-credit-risk-001
+      type: lifecycle_trace
+      severity: low
+      summary: 已形成从数据版本、训练任务、模型版本、发布申请、部署修订到推理记录的可审计链路。
+    recommendations:
+    - 持续监控特征漂移
+    - 保留发布审批记录
+    - 使用追加补偿记录替代删除和覆盖
+    source: mock
+  trace_id: mock-trace-platform-model-governance-audit-query-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-model-governance-audit-query-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.task.status
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: query_task_status
+  schema_ref: mock.schema.platform.task.status
+  fallback_to_real: false
+  description: 训练任务状态汇总 mock 数据，可替换为真实训练任务列表与统计。
+  payload:
+    skill_id: query_task_status
+    summary: 共 1 个训练任务，运行中 0
+    stats:
+      total: 1
+      succeeded: 1
+    items:
+    - id: train-credit-risk-20260528-001
+      status: succeeded
+      source: mock
+  trace_id: mock-trace-platform-task-status-query_task_status
+  audit_id: mock-audit-platform-task-status-query_task_status
+- resource_key: platform.lineage.graph
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: query_lineage
+  schema_ref: mock.schema.platform.lineage.graph
+  fallback_to_real: false
+  description: 数据/任务血缘图 mock 数据，可替换为真实 lineage 服务返回。
+  payload:
+    skill_id: query_lineage
+    summary: 已构建训练链路血缘图
+    lineage:
+      root: ds-credit-risk-001
+      upstream:
+      - raw_credit_order_table
+      - raw_customer_profile_table
+      downstream:
+      - train-credit-risk-20260528-001
+    source: mock
+  trace_id: mock-trace-platform-lineage-graph-query_lineage
+  audit_id: mock-audit-platform-lineage-graph-query_lineage
+- resource_key: platform.model.versions.list
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.model.versions.list
+  fallback_to_real: false
+  description: 模型版本列表 mock 数据，可替换为真实模型注册中心分页查询。
+  payload:
+    model_name: credit-risk-score
+    total: 1
+    items:
+    - id: mv-credit-risk-20260528-001
+      model_name: credit-risk-score
+      version: 20260528-001
+      status: ready
+  trace_id: mock-trace-platform-model-versions-list-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-model-versions-list-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.inference.services.list
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: ml_lifecycle_minimum_closed_loop
+  schema_ref: mock.schema.platform.inference.services.list
+  fallback_to_real: false
+  description: 推理服务列表 mock 数据，可替换为真实服务发现/分页查询。
+  payload:
+    total: 1
+    items:
+    - name: credit-risk-score-prod
+      status: running
+      model_name: credit-risk-score
+  trace_id: mock-trace-platform-inference-services-list-ml_lifecycle_minimum_closed_loop
+  audit_id: mock-audit-platform-inference-services-list-ml_lifecycle_minimum_closed_loop
+- resource_key: platform.dependency.graph
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: platform_ml_lifecycle_analysis
+  schema_ref: mock.schema.platform.dependency.graph
+  fallback_to_real: false
+  description: 平台依赖图 mock 数据，可替换为真实依赖拓扑查询。
+  payload:
+    root: agent-service
+    nodes:
+    - id: agent-service
+      type: service
+    - id: core-service
+      type: service
+    edges:
+    - from: agent-service
+      to: core-service
+    source: mock
+  trace_id: mock-trace-platform-dependency-graph-platform_ml_lifecycle_analysis
+  audit_id: mock-audit-platform-dependency-graph-platform_ml_lifecycle_analysis
+- resource_key: platform.code.search
+  source: mock
+  replaceable: true
+  version: 1.0.0
+  scenario: platform_ml_lifecycle_analysis
+  schema_ref: mock.schema.platform.code.search
+  fallback_to_real: false
+  description: 代码搜索 mock 数据，可替换为真实代码索引/搜索结果。
+  payload:
+    query: mcp_server
+    matches:
+    - file: backend/agent-service/services/mcp_server.py
+      symbol: MCPServer
+      reason: MCP gateway implementation
+    - file: backend/agent-service/services/orchestrator.py
+      symbol: AgentOrchestrator
+      reason: agent execution boundary
+    - file: backend/agent-service/services/skills_registry.py
+      symbol: SkillsRegistry
+      reason: skill metadata and risk policy
+    source: mock
+  trace_id: mock-trace-platform-code-search-platform_ml_lifecycle_analysis
+  audit_id: mock-audit-platform-code-search-platform_ml_lifecycle_analysis

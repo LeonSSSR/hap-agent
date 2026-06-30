@@ -1,0 +1,7 @@
+includes:
+  - mcp/tools/shared.yaml
+  - mcp/tools/platform.yaml
+  - mcp/tools/data_processing.yaml
+  - mcp/tools/model_development.yaml
+  - mcp/tools/model_application.yaml
+  - mcp/tools/generated_frontend_apis.yaml

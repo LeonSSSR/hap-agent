@@ -1,0 +1,18 @@
+# 最小 Agent 栈：agent-service + 可选 nginx 静态前端（需自行 build host 应用）
+services:
+  agent-service:
+    build:
+      context: ../backend/agent-service
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8010"
+    env_file:
+      - ../backend/agent-service/.env
+    environment:
+      CORE_SERVICE_URL: ${CORE_SERVICE_URL:-http://host.docker.internal:8085}
+    volumes:
+      - agent-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  agent-data:

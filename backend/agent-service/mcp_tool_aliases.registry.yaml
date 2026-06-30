@@ -1,0 +1,83 @@
+# MCP 工具别名注册表（v2）
+# canonical 定义在 mcp_tools.registry.yaml；别名用于兼容旧工具名，执行时由 mcp_adapter 映射。
+registry_id: znl-mcp-tool-aliases
+version: 2.0.0
+aliases:
+  - alias: tcp_connect_probe
+    canonical: platform_service_inventory
+    risk_level: low
+    description: 兼容旧 Skill 名称的 TCP 探活别名
+  - alias: service_registry_lookup
+    canonical: platform_service_inventory
+    risk_level: low
+    description: 服务注册发现只读别名
+  - alias: task_status_reader
+    canonical: platform_task_status
+    risk_level: low
+    description: 任务状态读取别名
+  - alias: workflow_state_reader
+    canonical: platform_task_status
+    risk_level: low
+    description: 工作流状态读取别名
+  - alias: lineage_query
+    canonical: platform_lineage_query
+    risk_level: low
+    description: 血缘查询别名
+  - alias: catalog_lookup
+    canonical: platform_lineage_query
+    risk_level: low
+    description: 目录查询别名
+  - alias: algorithm_catalog_query
+    canonical: hap_api_get_algorithms
+    risk_level: low
+    description: 语义化算法目录查询 → 真实 API
+  - alias: algorithm_register
+    canonical: hap_api_post_algorithms
+    risk_level: medium
+    description: 语义化算法注册 → 真实 API
+  - alias: labeling_project_list
+    canonical: hap_api_get_labeling_projects
+    risk_level: low
+    description: 标注项目列表 → 真实 API
+  - alias: labeling_project_create
+    canonical: hap_api_post_labeling_projects
+    risk_level: medium
+    description: 创建标注项目 → 真实 API
+  - alias: notebook_catalog_query
+    canonical: hap_api_get_notebooks
+    risk_level: low
+    description: Notebook 目录 → 真实 API
+  - alias: notebook_session_create
+    canonical: hap_api_post_notebooks
+    risk_level: medium
+    description: 创建 Notebook → 真实 API
+  - alias: hyperparam_experiment_list
+    canonical: hap_api_get_tuning_proxy_experiments
+    risk_level: low
+    description: 调优实验列表 → 真实 API
+  - alias: hyperparam_experiment_create
+    canonical: hap_api_post_tuning_proxy_experiments
+    risk_level: medium
+    description: 创建调优实验 → 真实 API
+  - alias: data_exploration_query
+    canonical: hap_api_post_governance_explore
+    risk_level: low
+    description: 数据探索 → 真实 API
+  - alias: data_split_execute
+    canonical: hap_api_post_governance_split_execute
+    risk_level: medium
+    description: 数据切分 → governance split execute API（与前端一致）
+  - alias: model_evaluation_run
+    canonical: platform_api.model_versions.evaluate
+    risk_level: medium
+    description: 模型评估 → evaluate API
+  - alias: risk_policy_checker
+    canonical: risk_policy_checker
+    risk_level: high
+    description: 危险操作策略守卫（无 HTTP，mock/guard）
+    guard: true
+  - alias: approval_gate
+    canonical: approval_gate
+    risk_level: high
+    description: 审批闸门（无 HTTP，mock/guard）
+    guard: true
