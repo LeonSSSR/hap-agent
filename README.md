@@ -2,6 +2,18 @@
 
 HAP 平台 Agent 模块：**多轮 LLM + MCP 工具 + 页面 ui_action 自动化**。
 
+**仓库**：[github.com/LeonSSSR/hap-agent](https://github.com/LeonSSSR/hap-agent)
+
+## 设计与实现文档
+
+| 文档 | 说明 |
+|------|------|
+| [docs/README.md](docs/README.md) | 文档索引 |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 架构设计、模块边界、部署拓扑 |
+| [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) | 后端/前端实现细节与调用链 |
+| [docs/SSE_PROTOCOL.md](docs/SSE_PROTOCOL.md) | `run/stream` SSE 事件协议 |
+| [docs/PAGE_AUTOMATION.md](docs/PAGE_AUTOMATION.md) | Catalog、Registry、DOM 锚点 |
+
 ## 目录结构
 
 ```
